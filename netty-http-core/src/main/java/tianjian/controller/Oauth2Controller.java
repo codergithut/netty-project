@@ -34,7 +34,7 @@ public class Oauth2Controller {
 
         System.out.println(haha);
 
-        ModelAndViewer modelAndViewer = new ModelAndViewer("index.ftl", data);
+        ModelAndViewer modelAndViewer = new ModelAndViewer("login.ftl", data);
 
         return modelAndViewer;
     }
