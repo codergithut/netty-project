@@ -16,7 +16,6 @@ import tianjian.http.metadata.annotation.RequestMapping;
 import tianjian.http.metadata.annotation.ResponseBody;
 import tianjian.http.metadata.annotation.RestController;
 import tianjian.http.netty.core.contain.common.ChatServer;
-import tianjian.http.netty.core.contain.oauth2.Oauth2Server;
 import tianjian.http.util.MyBeanUtils;
 import tianjian.http.util.ReflectUtil;
 import tianjian.http.view.ViewEngineManage;
@@ -66,13 +65,6 @@ public class InitSystemBean implements ApplicationListener<ContextRefreshedEvent
 
     /**
      * @author <a href="mailto:tianjian@gtmap.cn">tianjian</a>
-     * @description 单点登录服务模拟
-     */
-    @Autowired
-    Oauth2Server oauth2Server;
-
-    /**
-     * @author <a href="mailto:tianjian@gtmap.cn">tianjian</a>
      * @description http服务模拟
      */
     @Autowired
@@ -97,14 +89,6 @@ public class InitSystemBean implements ApplicationListener<ContextRefreshedEvent
         Map<String,Object> restControllerContents = contextRefreshedEvent.getApplicationContext().getBeansWithAnnotation(RestController.class);
 
         InitControllerParam(restControllerContents.entrySet(), "rest");
-
-        executor.execute(
-                new Thread() {
-                    public void run() {
-                        oauth2Server.run(null);
-                    }
-                }
-        );
 
         executor.execute(
                 new Thread() {

@@ -4,12 +4,10 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
-import netty.tianjian.common.util.qrcode.Qrest;
 import netty.tianjian.log.annotation.AopLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import tianjian.http.filter.impl.IegalUrlFilter;
 import tianjian.http.filter.impl.ResourceFilter;
-import tianjian.http.netty.core.handle.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +62,15 @@ public class HttpFilterBeforeHandler extends SimpleChannelInboundHandler<FullHtt
 
         String url = request.getUri();
 
+//        Qrest.qrest(UUIDTool.getUUID());
+
         resourceFilter.extendFilterUrl("static");
+
+
+
+        if(url.equals("/js/user.js")) {
+            System.out.println(url + "00000000000000000000000000000");
+        }
 
         if(resourceFilter.filterHttpRequest(url)) {
 
@@ -73,7 +79,6 @@ public class HttpFilterBeforeHandler extends SimpleChannelInboundHandler<FullHtt
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
 
             writeResponseToClient(request, randomAccessFile, ctx, true);
-
 
             writeContentToClient(randomAccessFile, request, ctx);
 

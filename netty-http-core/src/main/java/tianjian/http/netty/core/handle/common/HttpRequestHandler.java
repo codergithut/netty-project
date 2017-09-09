@@ -3,12 +3,12 @@ package tianjian.http.netty.core.handle.common;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.FullHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import tianjian.http.controller.BaseControllerHandle;
 import tianjian.http.model.UrlInfo;
-import tianjian.http.netty.core.handle.*;
-import tianjian.http.netty.core.handle.common.CommonHandler;
+import tianjian.http.netty.core.handle.HttpUtil;
+import tianjian.http.util.FileUtil;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -40,11 +40,25 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
         File file = baseControllerHandle.handlRequest(userInfo.getRequest(), null);
 
-        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+        String content = new String(FileUtil.getFileAsBytes(file));
 
-        writeResponseToClient(request, randomAccessFile, ctx, false);
+        if(content.startsWith("redirect:")) {
 
-        writeContentToClient(randomAccessFile, request, ctx);
+            String redirect = content.split("redirect:")[1];
+
+            HttpUtil.send301Continue(ctx, redirect);
+
+        } else {
+
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+
+            writeResponseToClient(request, randomAccessFile, ctx, false);
+
+            writeContentToClient(randomAccessFile, request, ctx);
+
+        }
+
+
 
         request.retain();
 

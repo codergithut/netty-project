@@ -11,11 +11,12 @@ import java.io.IOException;
  */
 public class Qrest {
 
-    public static void main(String[] args) {
 
-        String content="http://www.baidu.com";
+    public static void qrest(String code, String url) {
+
+        String content="http://localhost:9999/getResource?";
         String logUri="D:\\test.jpg";
-        String outFileUri="D:\\log.jpg";
+        String outFileUri="E:\\wechart\\netty-project\\netty-http-core\\src\\main\\resources\\static\\img\\test.jpg";
         int[]  size=new int[]{430,430};
         String format = "jpg";
 

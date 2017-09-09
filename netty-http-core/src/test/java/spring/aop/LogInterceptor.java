@@ -1,4 +1,4 @@
-package tianjian.http.aop;
+package spring.aop;
 
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogInterceptor {
 
-    @Pointcut("execution(public * tianjian.http.aop.service..*.add(..))")
+    @Pointcut("execution(public * spring.aop.service..*.add(..))")
     public void myMethod(){}
 
     /*@Before("execution(public void com.bjsxt.dao.impl.UserDAOImpl.save(com.bjsxt.model.User))")*/
@@ -24,11 +24,11 @@ public class LogInterceptor {
     public void after() {
         System.out.println("method after");
     }
-    @AfterReturning("execution(public * tianjian.http.aop.dao..*.*(..))")
+    @AfterReturning("execution(public * spring.aop.dao..*.*(..))")
     public void AfterReturning() {
         System.out.println("method AfterReturning");
     }
-    @AfterThrowing("execution(public * tianjian.http.aop.dao..*.*(..))")
+    @AfterThrowing("execution(public * spring.aop.dao..*.*(..))")
     public void AfterThrowing() {
         System.out.println("method AfterThrowing");
     }

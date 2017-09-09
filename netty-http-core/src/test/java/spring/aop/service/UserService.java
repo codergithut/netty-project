@@ -1,8 +1,8 @@
-package tianjian.http.aop.service;
+package spring.aop.service;
 
 import org.springframework.stereotype.Component;
-import tianjian.http.aop.dao.UserDAO;
-import tianjian.http.aop.model.User;
+import spring.aop.dao.UserDAO;
+import spring.aop.model.User;
 
 import javax.annotation.Resource;
 

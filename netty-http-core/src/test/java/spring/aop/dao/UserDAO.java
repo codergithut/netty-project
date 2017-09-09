@@ -1,6 +1,6 @@
-package tianjian.http.aop.dao;
+package spring.aop.dao;
 
-import tianjian.http.aop.model.User;
+import spring.aop.model.User;
 
 /**
  * @author <a href="mailto:Administrator@gtmap.cn">Administrator</a>

@@ -1,11 +1,10 @@
 package spring.aop;
 
-import netty.tianjian.log.annotation.AopLog;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import spring.base.BaseJunit4Test;
-import tianjian.http.aop.model.User;
-import tianjian.http.aop.service.UserService;
+import spring.aop.model.User;
+import spring.aop.service.UserService;
 
 /**
  * @author <a href="mailto:Administrator@gtmap.cn">Administrator</a>

@@ -15,9 +15,6 @@ import tianjian.http.netty.core.contain.common.ChatServerInitializer;
 import tianjian.http.netty.core.handle.common.HttpFilterAfterHandler;
 import tianjian.http.netty.core.handle.common.HttpFilterBeforeHandler;
 import tianjian.http.netty.core.handle.common.HttpRequestHandler;
-import tianjian.http.netty.core.handle.oauht2.HttpOauth2ClientHandler;
-import tianjian.http.netty.core.handle.oauht2.HttpOauth2ResourceHandler;
-import tianjian.http.netty.core.handle.oauht2.HttpOauth2ServiceHandler;
 import tianjian.http.view.FreeMarkerEngine;
 
 /**
@@ -61,11 +58,6 @@ public class NettyServerConfig {
         return resourceFilter;
     }
 
-    @Bean(value = "oauth2")
-    public ChannelGroup getOauth2ChannelGroup() {
-        return new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);
-    }
-
     @Bean(value = "client")
     public ChannelGroup getChannelGroup() {
         return new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE);
@@ -77,20 +69,5 @@ public class NettyServerConfig {
         return freeMarkerEngine;
     }
 
-
-    @Bean
-    public HttpOauth2ClientHandler getHttpOauth2ClientHandler() {
-        return new HttpOauth2ClientHandler();
-    }
-
-    @Bean
-    public HttpOauth2ResourceHandler getHttpOauth2ResourceHandler() {
-        return new HttpOauth2ResourceHandler();
-    }
-
-    @Bean
-    public HttpOauth2ServiceHandler getHttpOauth2ServiceHandler() {
-        return new HttpOauth2ServiceHandler();
-    }
 
 }

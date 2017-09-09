@@ -1,8 +1,8 @@
-package tianjian.http.aop.dao.impl;
+package spring.aop.dao.impl;
 
 import org.springframework.stereotype.Component;
-import tianjian.http.aop.dao.UserDAO;
-import tianjian.http.aop.model.User;
+import spring.aop.dao.UserDAO;
+import spring.aop.model.User;
 
 /**
  * @author <a href="mailto:Administrator@gtmap.cn">Administrator</a>

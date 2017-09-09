@@ -1,4 +1,4 @@
-package tianjian.http.aop.model;
+package spring.aop.model;
 
 /**
  * @author <a href="mailto:Administrator@gtmap.cn">Administrator</a>

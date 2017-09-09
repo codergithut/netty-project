@@ -1,7 +1,6 @@
-package tianjian.http.netty.core.handle.oauht2;
+package tianjian.http.model;
 
 import org.springframework.stereotype.Service;
-import tianjian.http.model.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +15,7 @@ public class ResourceGuard {
     private Map<String,Map<String,String>> resources = new HashMap<String,Map<String,String>>();
 
     private Map<String,User> userinfo = new HashMap<String,User>();
+
 
     public Map<String, Map<String,String>> getResources() {
         return resources;
@@ -37,6 +37,10 @@ public class ResourceGuard {
 
     public Map<String, User> getUserinfo() {
         return userinfo;
+    }
+
+    public void addUserInfo(String token, User user) {
+        userinfo.put(token, user);
     }
 
     public void addTokenUser(String token, User user) {

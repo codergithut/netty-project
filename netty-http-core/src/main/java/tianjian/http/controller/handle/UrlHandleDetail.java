@@ -85,21 +85,33 @@ public class UrlHandleDetail {
 
         File returnFile = null;
 
-        if(viewMeta.isView()) {
-            returnFile = viewMeta.viewHandle(returnObject, viewEngineManage);
-        } else {
-            returnFileString = JSON.toJSONString(returnObject);
+        String url = null;
+        if(returnObject instanceof String) {
+            url = (String) returnObject;
         }
 
-        if(returnFile != null) {
+        if(url != null && url.startsWith("redirect:")) {
 
-        }
-
-        if(returnFile == null && returnFileString != null) {
             returnFile = new File("returnContent");
-            FileUtil.saveStringToFile(returnFileString, returnFile);
-        }
+            FileUtil.saveStringToFile(url, returnFile);
 
+        } else {
+
+            if(viewMeta.isView()) {
+                returnFile = viewMeta.viewHandle(returnObject, viewEngineManage);
+            } else {
+                returnFileString = JSON.toJSONString(returnObject);
+            }
+
+            if(returnFileString == null && returnObject instanceof String) {
+                returnFileString = (String) returnObject;
+            }
+
+            if(returnFile == null && returnFileString != null) {
+                returnFile = new File("returnContent");
+                FileUtil.saveStringToFile(returnFileString, returnFile);
+            }
+        }
         return returnFile;
     }
 
