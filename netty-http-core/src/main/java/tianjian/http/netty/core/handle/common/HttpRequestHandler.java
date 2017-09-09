@@ -7,7 +7,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import tianjian.http.controller.BaseControllerHandle;
 import tianjian.http.model.UrlInfo;
-import tianjian.http.netty.core.handle.HttpUtil;
+import tianjian.http.netty.core.handle.MyHttpUtil;
 import tianjian.http.util.FileUtil;
 
 import java.io.File;
@@ -34,11 +34,9 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
      */
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
 
-        String url = request.getUri();
+        UrlInfo urlInfo = MyHttpUtil.getUrlInfoByString(request.getUri());
 
-        UrlInfo userInfo = tianjian.http.netty.core.handle.HttpUtil.getUrlInfoByString(url);
-
-        File file = baseControllerHandle.handlRequest(userInfo.getRequest(), null);
+        File file = baseControllerHandle.handlRequest(urlInfo.getRequest(), urlInfo.getParams());
 
         String content = new String(FileUtil.getFileAsBytes(file));
 
@@ -46,7 +44,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
             String redirect = content.split("redirect:")[1];
 
-            HttpUtil.send301Continue(ctx, redirect);
+            MyHttpUtil.send301Continue(ctx, redirect);
 
         } else {
 

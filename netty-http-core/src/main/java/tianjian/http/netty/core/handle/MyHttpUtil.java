@@ -17,7 +17,7 @@ import java.util.Map;
  * @version 1.0, 2017/9/5
  * @description Http服务常用的消息封装
  */
-public class HttpUtil {
+public class MyHttpUtil {
 
     /**
      * @author <a href="mailto:tianjian@gtmap.cn">tianjian</a>

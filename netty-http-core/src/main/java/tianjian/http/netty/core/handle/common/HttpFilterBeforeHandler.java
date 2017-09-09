@@ -8,6 +8,8 @@ import netty.tianjian.log.annotation.AopLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import tianjian.http.filter.impl.IegalUrlFilter;
 import tianjian.http.filter.impl.ResourceFilter;
+import tianjian.http.model.UrlInfo;
+import tianjian.http.netty.core.handle.MyHttpUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,19 +62,11 @@ public class HttpFilterBeforeHandler extends SimpleChannelInboundHandler<FullHtt
     @AopLog
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws IOException {
 
-        String url = request.getUri();
-
-//        Qrest.qrest(UUIDTool.getUUID());
+        UrlInfo urlInfo = MyHttpUtil.getUrlInfoByString(request.getUri());
 
         resourceFilter.extendFilterUrl("static");
 
-
-
-        if(url.equals("/js/user.js")) {
-            System.out.println(url + "00000000000000000000000000000");
-        }
-
-        if(resourceFilter.filterHttpRequest(url)) {
+        if(resourceFilter.filterHttpRequest(urlInfo.getRequest())) {
 
             File file = resourceFilter.HandleHttpRequest(request.getUri());
 
@@ -84,7 +78,7 @@ public class HttpFilterBeforeHandler extends SimpleChannelInboundHandler<FullHtt
 
             request.retain();
 
-        } else if(iegalUrlFilter.filterHttpRequest(url)) {
+        } else if(iegalUrlFilter.filterHttpRequest(urlInfo.getRequest())) {
             ctx.fireChannelRead(request.retain());
         }
     }

@@ -41,7 +41,7 @@ public class BaseControllerHandle {
      * @description 根据前端的url和参数返回对应的结果
      */
     public File handlRequest(String url, Map<String, String> params) throws Exception {
-        return routes.get(url).handleRequest(params);
+         return routes.get(url).handleRequest(params);
     }
 
 

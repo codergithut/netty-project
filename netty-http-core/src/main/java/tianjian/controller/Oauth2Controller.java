@@ -5,13 +5,12 @@ import org.springframework.stereotype.Controller;
 import tianjian.http.metadata.RequestMethod;
 import tianjian.http.metadata.annotation.RequestMapping;
 import tianjian.http.metadata.annotation.ResponseBody;
-import tianjian.http.model.Model;
-import tianjian.http.model.ModelAndViewer;
-import tianjian.http.model.ResourceGuard;
-import tianjian.http.model.User;
+import tianjian.http.model.*;
 import tianjian.http.util.UUIDTool;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +22,9 @@ import java.util.Map;
 public class Oauth2Controller {
 
     @Autowired
-    ResourceGuard resourceGuard;
+    Oauth2ResourceGuard oauth2ResourceGuard;
+
+    private String token = null;
 
     //注册添加用户信息
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -39,15 +40,30 @@ public class Oauth2Controller {
         return modelAndViewer;
     }
 
+    //注册添加用户信息
+    @RequestMapping(value = "/userinfo", method = RequestMethod.POST)
+    @ResponseBody
+    public Object UserInfo(Model model, String haha) {
 
-    //授权方法
+        User user = new User();
+
+        user.setPassword("tianjian");
+
+        user.setName("tianjian");
+
+        return user;
+    }
+
+
+    //授权方法 携带验证方式 如果手机扫码type 传入phone 如果是用户登录就 pc
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public Object loginUser(Model model) {
+    public Object loginUser(String guard, String type) {
 
-        //todo 验证用户信息
 
-        return "redirect:http://localhost:8080/getResourceToken";
+        //todo 验证用户信息 携带用户信息给ResourceToken服务器
+
+        return "redirect:http://localhost:8080/getResourceToken?guard=" + guard + "&type=" + type;
     }
 
     //注册添加用户信息
@@ -55,19 +71,13 @@ public class Oauth2Controller {
     @ResponseBody
     public Object getResource(Model model) {
 
-
-        if(resourceGuard.getUserinfo().size() == 0) {
-
+        if(token == null) {
             return "redirect:http://localhost:8080/getResourceID";
-
         } else {
-            User user = new User();
 
-            user.setPassword("hahh");
+            String resource = Oauth2ResourceGuard.getGrard(token).getResources().get(0);
 
-            user.setName("tianjian");
-
-            return user;
+            return "redirect:http://localhost:8080/" + resource;
         }
 
     }
@@ -77,17 +87,17 @@ public class Oauth2Controller {
     @ResponseBody
     public Object getResourceID(Model model) {
 
-        ModelAndViewer modelAndViewer = new ModelAndViewer("index.ftl", null);
+        String guard = UUIDTool.getUUID();
 
-        return "redirect:http://localhost:8080/login";
+        return "redirect:http://localhost:8080/login?guard=" + guard;
     }
 
     //注册添加用户信息
     @RequestMapping(value = "/getResourceToken", method = RequestMethod.GET)
     @ResponseBody
-    public Object getResourceToken(Model model) {
+    public Object getResourceToken(String guard, String type) {
 
-        String token = UUIDTool.getUUID();
+        token = UUIDTool.getUUID();
 
         User user = new User();
 
@@ -95,11 +105,42 @@ public class Oauth2Controller {
 
         user.setPassword("hahah");
 
-        resourceGuard.addTokenUser(token, user);
+        List<String> resources = new ArrayList<String>();
 
-        ModelAndViewer modelAndViewer = new ModelAndViewer("index.ftl", null);
+        resources.add("userinfo");
+
+        oauth2ResourceGuard.setToken(token);
+
+        oauth2ResourceGuard.setResources(resources);
+
+        oauth2ResourceGuard.setUser(user);
+
+        oauth2ResourceGuard.setGuard(guard);
+
+        Oauth2ResourceGuard.addGuard(token, oauth2ResourceGuard);
+
+        if(type.equals("ajax")) {
+            return "ajax";
+        }
 
         return "redirect:http://localhost:8080/getResource";
+    }
+
+    //注册添加用户信息
+    @RequestMapping(value = "/getToken", method = RequestMethod.GET)
+    @ResponseBody
+    public Object getToken(String guard) {
+
+        Map<String, Oauth2ResourceGuard> all = Oauth2ResourceGuard.getResourceGuardHash();
+
+        for(Map.Entry<String,Oauth2ResourceGuard> entry : all.entrySet()) {
+            if(entry.getValue().getGuard().equals(guard)) {
+                return entry.getKey();
+            }
+        }
+
+        return "false";
+
     }
 
 }
