@@ -58,12 +58,12 @@ public class Oauth2Controller {
     //授权方法 携带验证方式 如果手机扫码type 传入phone 如果是用户登录就 pc
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public Object loginUser(String guard, String type) {
+    public Object loginUser(String guard) {
 
 
         //todo 验证用户信息 携带用户信息给ResourceToken服务器
 
-        return "redirect:http://localhost:8080/getResourceToken?guard=" + guard + "&type=" + type;
+        return "redirect:http://localhost:8080/getResourceToken?guard=" + guard + "&type=ajax";
     }
 
     //注册添加用户信息
@@ -89,7 +89,15 @@ public class Oauth2Controller {
 
         String guard = UUIDTool.getUUID();
 
-        return "redirect:http://localhost:8080/login?guard=" + guard;
+        return new ModelAndViewer("mobile.ftl", null);
+//        return "redirect:http://localhost:8080/login?guard=" + guard;
+    }
+
+    //授权方法 携带验证方式 如果手机扫码type 传入phone 如果是用户登录就 pc
+    @RequestMapping(value = "/mobile", method = RequestMethod.GET)
+    @ResponseBody
+    public Object loginByMobile(String guard) {
+        return new ModelAndViewer("mobile.ftl", null);
     }
 
     //注册添加用户信息
