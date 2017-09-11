@@ -30,6 +30,9 @@
                         <span class="fa fa-envelope fa-lg"></span>
                         <input type="text" id="loginEmail" name="id" placeholder="输入账号" />
                     </div>
+                    <div display="none">
+                    <input type="text" value="${gurad}"/>
+                    </div>
                     <div class="user-login-password user-style-input">
                         <span class="fa fa-key fa-lg"></span>
                         <input type="password" id="loginPassword" name="password" id = "password" placeholder="输入密码" />

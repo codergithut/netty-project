@@ -1,5 +1,6 @@
 package tianjian.controller;
 
+import netty.tianjian.common.util.qrcode.Qrest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import tianjian.http.metadata.RequestMethod;
@@ -55,15 +56,32 @@ public class Oauth2Controller {
     }
 
 
-    //授权方法 携带验证方式 如果手机扫码type 传入phone 如果是用户登录就 pc
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     public Object loginUser(String guard) {
 
+        Map<String,Object> model = new HashMap<String, Object>();
+        model.put("gurad", guard);
+        return new ModelAndViewer("pc.ftl", model);
+    }
 
-        //todo 验证用户信息 携带用户信息给ResourceToken服务器
+
+
+    //login 验证 可以通过手机验证也可以通过pc页面验证
+    @RequestMapping(value = "/check", method = RequestMethod.GET)
+    @ResponseBody
+    public Object checkUser(String guard, String id, String password) {
+
+        System.out.println("test");
+
+        System.out.println("tsestttt");
+
+        if("tianjian".equals(password) && "id".equals(id)) {
+            return "redirect:http://localhost:8080/getResourceToken?guard=" + guard + "&type=ajax";
+        }
 
         return "redirect:http://localhost:8080/getResourceToken?guard=" + guard + "&type=ajax";
+
     }
 
     //注册添加用户信息
@@ -85,12 +103,17 @@ public class Oauth2Controller {
     //注册添加用户信息
     @RequestMapping(value = "/getResourceID", method = RequestMethod.GET)
     @ResponseBody
-    public Object getResourceID(Model model) {
+    public Object getResourceID() {
 
+        Map<String,Object> model = new HashMap<String,Object>();
         String guard = UUIDTool.getUUID();
 
-        return new ModelAndViewer("mobile.ftl", null);
-//        return "redirect:http://localhost:8080/login?guard=" + guard;
+        model.put("img", guard);
+
+//        Qrest.qrest(guard, "http://www.baidu.com?gurad=" + guard);
+//
+//        return new ModelAndViewer("mobile.ftl", model);
+        return "redirect:http://localhost:8080/login?guard=" + guard;
     }
 
     //授权方法 携带验证方式 如果手机扫码type 传入phone 如果是用户登录就 pc

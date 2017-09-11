@@ -27,8 +27,8 @@ $(function () {
         var id = $("#loginEmail").val();
         var password = $("#loginPassword").val();
         $.ajax({
-            url:'http://localhost:8080/talk/check',
-            method :'POST',
+            url:'http://localhost:8080/check',
+            method :'GET',
             dataType:'json',
             data:{id:id,password:password},
         }).done(function(data) {

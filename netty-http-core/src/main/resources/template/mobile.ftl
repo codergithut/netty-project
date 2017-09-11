@@ -12,7 +12,7 @@
          .content .box h3 {font-weight: normal;color: #333333;}
         .content .box p {color: #666666;}
         .content .img {padding: 2px;border:1px solid #D1D1D1;display: inline-block;}
-        .content .img img {width: 80px;}
+        .content .img img {width: 160px;}
         footer {text-align: center;padding: 25px 0;font-size: 12px;}
         footer a {padding: 0 6px;}
     </style>
@@ -26,7 +26,7 @@
             <h3>快速安全登录</h3>
             <p>请使用手机版扫描二维码</p>
             <div class="img">
-                <img src="/static/img/test.jpg" />
+                <img src="/static/img/${img}.jpg" />
             </div>
         </div>
     </div>

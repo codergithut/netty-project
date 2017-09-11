@@ -15,8 +15,8 @@ public class Qrest {
     public static void qrest(String code, String url) {
 
         String content="http://localhost:9999/getResource?";
-        String logUri="D:\\test.jpg";
-        String outFileUri="E:\\wechart\\netty-project\\netty-http-core\\src\\main\\resources\\static\\img\\test.jpg";
+        String logUri="/Users/tianjian/IdeaProjects/springboot-wechart/src/main/resources/static/img/user/user3.jpg";
+        String outFileUri="/Users/tianjian/IdeaProjects/nettyproject/netty-http-core/src/main/resources/static/img/" + code + ".jpg";
         int[]  size=new int[]{430,430};
         String format = "jpg";
 
