@@ -1,5 +1,6 @@
 package tianjian.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import tianjian.http.metadata.RequestMethod;
@@ -40,10 +41,26 @@ public class Oauth2Controller {
         return modelAndViewer;
     }
 
+
+    //注册添加用户信息
+    @RequestMapping(value = "/common", method = RequestMethod.POST)
+    @ResponseBody
+    public Object common(Model model, String username, String token) {
+        if (StringUtils.isBlank(username) && StringUtils.isBlank(token)) {
+            //进行资源请求
+            return "redirect:http://localhost:8080/getResource?redirect=http://localhost:8080/common";
+        } else if(!StringUtils.isBlank(token)) {
+            return "redirect:http://localhost:8080/getResource?token=" + token + "&redirect=http://localhost:8080/common";
+        } else {
+            return username;
+        }
+    }
+
+
     //注册添加用户信息
     @RequestMapping(value = "/userinfo", method = RequestMethod.POST)
     @ResponseBody
-    public Object UserInfo(Model model, String haha) {
+    public String UserInfo(Model model, String redirect) {
 
         User user = new User();
 
@@ -51,33 +68,36 @@ public class Oauth2Controller {
 
         user.setName("tianjian");
 
-        return user;
+        return "redirect:" + redirect + "?username=" + user.getName();
     }
 
 
     //授权方法 携带验证方式 如果手机扫码type 传入phone 如果是用户登录就 pc
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public Object loginUser(String guard) {
+    public Object loginUser(String guard, String id, String password) {
 
+        if("tianjian".equals(id) && "tianjian".equals(password)) {
+            return "redirect:http://localhost:8080/getResourceToken?guard=" + guard;
+        }
+        return null;
 
-        //todo 验证用户信息 携带用户信息给ResourceToken服务器
-
-        return "redirect:http://localhost:8080/getResourceToken?guard=" + guard + "&type=ajax";
     }
 
     //注册添加用户信息
     @RequestMapping(value = "/getResource", method = RequestMethod.GET)
     @ResponseBody
-    public Object getResource(Model model) {
+    public Object getResource(Model model, String redirect, String token) {
 
-        if(token == null) {
-            return "redirect:http://localhost:8080/getResourceID";
+        if(StringUtils.isBlank(token)) {
+            //为资源生产token
+            return "redirect:http://localhost:8080/getResourceID?redirect=" + redirect;
         } else {
 
+            //根据token返回资源
             String resource = Oauth2ResourceGuard.getGrard(token).getResources().get(0);
 
-            return "redirect:http://localhost:8080/" + resource;
+            return "redirect:http://localhost:8080/" + resource + "?redirect=" + redirect;
         }
 
     }
@@ -89,21 +109,19 @@ public class Oauth2Controller {
 
         String guard = UUIDTool.getUUID();
 
-        return new ModelAndViewer("mobile.ftl", null);
-//        return "redirect:http://localhost:8080/login?guard=" + guard;
-    }
+        Map<String,Object> map = new HashMap<String,Object>();
 
-    //授权方法 携带验证方式 如果手机扫码type 传入phone 如果是用户登录就 pc
-    @RequestMapping(value = "/mobile", method = RequestMethod.GET)
-    @ResponseBody
-    public Object loginByMobile(String guard) {
-        return new ModelAndViewer("mobile.ftl", null);
+        map.put("ResourceID", guard);
+
+        System.out.println(guard);
+
+        return new ModelAndViewer("pc.ftl", map);
     }
 
     //注册添加用户信息
     @RequestMapping(value = "/getResourceToken", method = RequestMethod.GET)
     @ResponseBody
-    public Object getResourceToken(String guard, String type) {
+    public void getResourceToken(String guard) {
 
         token = UUIDTool.getUUID();
 
@@ -127,11 +145,7 @@ public class Oauth2Controller {
 
         Oauth2ResourceGuard.addGuard(token, oauth2ResourceGuard);
 
-        if(type.equals("ajax")) {
-            return "ajax";
-        }
-
-        return "redirect:http://localhost:8080/getResource";
+        System.out.println(token + "=======================================");
     }
 
     //注册添加用户信息
