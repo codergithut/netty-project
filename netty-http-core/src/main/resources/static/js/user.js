@@ -26,11 +26,12 @@ $(function () {
         e.preventDefault();
         var id = $("#loginEmail").val();
         var password = $("#loginPassword").val();
+        var guard = $("#guard").val();
         $.ajax({
-            url:'http://localhost:8080/talk/check',
-            method :'POST',
+            url:'http://localhost:8080/login',
+            method :'GET',
             dataType:'json',
-            data:{id:id,password:password},
+            data:{id:id,password:password,guard:guard},
         }).done(function(data) {
             //登录跳转
         });

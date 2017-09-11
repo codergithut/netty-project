@@ -1,12 +1,11 @@
 package netty.tianjian.common.util.http;
 
 import abstracts.AbstractEntrance;
+import netty.tianjian.common.util.elastic.server.ElasticServer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.net.UnknownHostException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,9 +46,19 @@ public class HtmlContent {
             root = HttpUtil.getTopDomain(url);
             linked = HttpUtil.getLink(origincontent, root);
             js = HttpUtil.getScript(origincontent);
-            AbstractEntrance abstractEntrance = new AbstractEntrance();
+            //AbstractEntrance abstractEntrance = new AbstractEntrance();
             //summary = abstractEntrance.getAbstractByContent(content, 100);
         }
+    }
+
+    public void saveElasticData() throws UnknownHostException {
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("url", url);
+        params.put("data", content);
+        params.put("root", root);
+        params.put("date", new Date().toString());
+        params.put("title", title);
+        ElasticServer.saveDataToEs(params, "search", "html");
     }
 
 

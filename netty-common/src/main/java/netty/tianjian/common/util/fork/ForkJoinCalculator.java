@@ -77,6 +77,7 @@ public class ForkJoinCalculator extends RecursiveTask<Set<String>> {
                 System.out.println("========================================================");
             }
             HtmlContent contents = new HtmlContent(url);
+            contents.saveElasticData();
             HttpFileUtil.saveStringToFile(contents.getContent(), contents.getRoot(), contents.getTitle());
             Set<String> linkeds = contents.getLinked();
             for(String linked : linkeds ) {
