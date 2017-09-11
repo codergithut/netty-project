@@ -105,13 +105,15 @@ public class Oauth2Controller {
     //注册添加用户信息
     @RequestMapping(value = "/getResourceID", method = RequestMethod.GET)
     @ResponseBody
-    public Object getResourceID(Model model) {
+    public Object getResourceID(Model model, String redirect) {
 
         String guard = UUIDTool.getUUID();
 
         Map<String,Object> map = new HashMap<String,Object>();
 
         map.put("ResourceID", guard);
+
+        map.put("redirect", redirect);
 
         System.out.println(guard);
 
@@ -155,13 +157,15 @@ public class Oauth2Controller {
 
         Map<String, Oauth2ResourceGuard> all = Oauth2ResourceGuard.getResourceGuardHash();
 
+        Map<String,String> data = new HashMap<String,String>();
+
         for(Map.Entry<String,Oauth2ResourceGuard> entry : all.entrySet()) {
             if(entry.getValue().getGuard().equals(guard)) {
-                return entry.getKey();
+                data.put("token", entry.getKey().toLowerCase());
+                return data;
             }
         }
-
-        return "false";
+        return null;
 
     }
 

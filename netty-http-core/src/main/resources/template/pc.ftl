@@ -36,6 +36,7 @@
 
 <div>
     <input type = "hidden" id="guard" value="${ResourceID}"/>
+    <input type = "hidden" id="redirect" value="${redirect}"/>
 </div>
 
 <body id="tab">
@@ -57,9 +58,7 @@
 
                     <input type="submit" class="user-login-submit" value="登录" />
                 </form>
-                <div class="other-login">
-                  <input type="button" value="QQ登录" onclick="chageTab()">
-                </div>
+                <div class="user-scan-a"><a>二维码扫描登录</a></div>
                 <div class="user-login-register">没有账户 ? 点击此处 <a>注册</a></div>
             </div>
         </div>
@@ -69,11 +68,29 @@
     <script src="./static/js/user.js"></script>
     <script type="text/javascript">
         function chageTab(){
-           debugger;
            var tab = '<header><h4>快速登录</h4></header><div class="content"><div class="box"><h3>快速安全登录</h3><p>请使用手机版扫描二维码</p><div class="img"><img src="./static/img/test.jpg" /></div></div></div><footer><a>账号密码登录</a>|<a>注册新账号</a></footer>'
            $("#tab").children().remove();
            $("#tab").append(tab);
         }
+
+        $(document).ready(function(){
+            setInterval(function(){
+                var guard = $("#guard").val();
+                $.ajax({
+                    url: "http://localhost:8080/getToken?guard=" + guard,
+                    context: document.body,
+                    async:true,
+                    dataType:'json',
+                    success: function(data){
+                        if(data != null) {
+                            for(var item in data){
+                                window.location.href=$("#redirect").val() + "?token=" + data[item];
+                            }
+                        }
+                    }
+                });
+            },1000)
+        });
     </script>
 </body>
 </html>

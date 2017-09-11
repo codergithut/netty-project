@@ -15,8 +15,8 @@ html {font-size: 20px;font-family: Helvetica Neue,Helvetica,Hiragino Sans GB,Mic
 .user-login-submit,.user-register-submit {width: 270px;height: 47px;background-color: #45928C;border: none;border-bottom:3px solid #367E7A;color: #FFFFFF;font-size: 18px;}
 .user-login-submit:hover,.user-register-submit:hover {background-color: #41AC9A;border-bottom:3px solid #349B86;}
 
-.user-login-register,.user-register-login {font-size: 12px;text-align: center;margin-top: 35px;}
-.user-login-register > a,.user-register-login > a {text-decoration: underline;cursor: pointer;}
+.user-login-register,.user-register-login,.user-scan-a {font-size: 12px;text-align: center;margin-top: 35px;}
+.user-login-register > a,.user-register-login,.user-scan-a > a {text-decoration: underline;cursor: pointer;}
 
 .user-register {display: none;}
 

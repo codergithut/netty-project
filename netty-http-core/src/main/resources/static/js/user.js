@@ -55,6 +55,12 @@ $(function () {
            .find(".user-register").hide();
     });
 
+    //注册转登录
+    chat.user.box.on("click",".user-scan-a",function (e) {
+        chageTab();
+    });
+
+
     //登录转注册
     chat.user.box.on("click",".user-login-register-a",function (e) {
         chat.user.box.find(".user-register").show().end()
