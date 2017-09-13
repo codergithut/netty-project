@@ -4,7 +4,6 @@ import netty.tianjian.common.util.elastic.client.ElasticSearchClientManage;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshResponse;
 import org.elasticsearch.action.bulk.*;
-import org.elasticsearch.action.bulk.byscroll.BulkByScrollResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
@@ -12,10 +11,7 @@ import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.MultiSearchResponse;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.search.*;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.unit.ByteSizeUnit;
@@ -23,9 +19,17 @@ import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
+import org.elasticsearch.index.reindex.DeleteByQueryRequestBuilder;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.script.ScriptType;
+import org.elasticsearch.script.mustache.SearchTemplateRequestBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
+import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.After;
@@ -57,6 +61,7 @@ public class ElasticSearchClientTest {
     private String addId;
 
     IndexResponse response;
+    private DeleteByQueryRequestBuilder deleteByQueryRequestBuilder;
 
     @Before
     public void initParam() throws UnknownHostException {
@@ -173,12 +178,15 @@ public class ElasticSearchClientTest {
         response = client.prepareIndex("twitter", "tweet")
                 .setSource(json)
                 .get();
-        BulkByScrollResponse bulkResponse =
+
+
+        BulkByScrollResponse response =
                 DeleteByQueryAction.INSTANCE.newRequestBuilder(client)
-                        .filter(QueryBuilders.matchQuery("user", "delete"))
-                        .source("twitter")
+                        .filter(QueryBuilders.matchQuery("gender", "male"))
+                        .source("persons")
                         .get();
-        long deleted = bulkResponse.getDeleted();
+
+        long deleted = response.getDeleted();
         //assertTrue(deleted == 1);
     }
 
@@ -373,6 +381,7 @@ public class ElasticSearchClientTest {
     }
 
     @Test
+    @Ignore
     public void mulitSearchTest() {
         SearchRequestBuilder srb1 = client
                 .prepareSearch().setQuery(QueryBuilders.queryStringQuery("elasticsearch")).setSize(1);
@@ -391,12 +400,134 @@ public class ElasticSearchClientTest {
         }
     }
 
+    @Test
+    @Ignore
+    public void UsingAggregationsTest() {
+        SearchResponse sr = client.prepareSearch()
+                .setQuery(QueryBuilders.matchAllQuery())
+                .addAggregation(
+                        AggregationBuilders.terms("agg1").field("field")
+                )
+                .addAggregation(
+                        AggregationBuilders.dateHistogram("agg2")
+                                .field("birth")
+                                .dateHistogramInterval(DateHistogramInterval.YEAR)
+                )
+                .get();
+
+        // Get your facet results
+        Terms agg1 = sr.getAggregations().get("agg1");
+        Histogram agg2 = sr.getAggregations().get("agg2");
+    }
+
+    /**
+     * @author <a href="mailto:tianjian@gtmap.cn">tianjian</a>
+     * @param
+     * @return
+     * @description 限制每个片上最大的查询条数
+     */
+    @Test
+    @Ignore
+    public void TerminateAfterTest() {
+        SearchResponse sr = client.prepareSearch()
+                .setTerminateAfter(2)
+                .get();
+
+        if (sr.isTerminatedEarly()) {
+            System.out.println("We finished early");
+        }
+    }
+
+    @Test
+    @Ignore
+    public void SearchTemplateTest() {
+
+        /**
+         * 模板参数设置
+         */
+        Map<String, Object> template_params = new HashMap<>();
+        template_params.put("param_gender", "male");
+//
+//        SearchResponse sr = new SearchTemplateRequestBuilder(client)
+//                .setScript("template_gender")
+//                .setScriptType(ScriptService.ScriptType.FILE)
+//                .setScriptParams(template_params)
+//                .setRequest(new SearchRequest())
+//                .get()
+//                .getResponse();
+//
+//        /**
+//         * 模板设置
+//         */
+//        client.admin().cluster().preparePutStoredScript()
+//                .setScriptLang("mustache")
+//                .setId("template_gender")
+//                .setSource(new BytesArray(
+//                        "{\n" +
+//                                "    \"query\" : {\n" +
+//                                "        \"match\" : {\n" +
+//                                "            \"gender\" : \"{{param_gender}}\"\n" +
+//                                "        }\n" +
+//                                "    }\n" +
+//                                "}")).get();
+//        /**
+//         * 按照模板查找
+//         */
+//        SearchResponse sr1 = new SearchTemplateRequestBuilder(client)
+//                .setScript("template_gender")
+//                .setScriptType(ScriptType.STORED)
+//                .setScriptParams(template_params)
+//                .setRequest(new SearchRequest())
+//                .get()
+//                .getResponse();
+
+        /**
+         * 组合拳，一次搞定
+         */
+        SearchResponse sr2 = new SearchTemplateRequestBuilder(client)
+                .setScript("{\n" +
+                        "        \"query\" : {\n" +
+                        "            \"match\" : {\n" +
+                        "                \"gender\" : \"{{param_gender}}\"\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "}")
+                .setScriptType(ScriptType.INLINE)
+                .setScriptParams(template_params)
+                .setRequest(new SearchRequest())
+                .get()
+                .getResponse();
+
+    }
+
+    @Test
+    public void StructuringAggregation() {
+
+        /**
+         * grunt 安装失败解决方案 http://www.imooc.com/qadetail/120294
+         * es套餐window环境处理方法 http://www.cnblogs.com/binshen/p/7419066.html
+         * es java api https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/java-span-queries.html
+         */
+
+        SearchResponse sr = client.prepareSearch()
+                .addAggregation(
+                        AggregationBuilders.terms("by_country").field("country")
+                                .subAggregation(AggregationBuilders.dateHistogram("by_year")
+                                        .field("dateOfBirth")
+                                        .dateHistogramInterval(DateHistogramInterval.YEAR)
+                                        .subAggregation(AggregationBuilders.avg("avg_children").field("children"))
+                                )
+                )
+                .execute().actionGet();
+        System.out.println(sr);
+    }
+
 
     @After
     public void clearResource() {
-        if(response != null) {
-            client.prepareDelete("twitter", "tweet", response.getId()).get();
-        }
+//        if(response != null) {
+//            client.prepareDelete("twitter", "tweet", response.getId()).get();
+//        }
         ElasticSearchClientManage.closeClient();
     }
 }

@@ -1,13 +1,13 @@
-package tianjian.controller;
+package tianjian.http.controller.oauth2;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import tianjian.http.metadata.RequestMethod;
 import tianjian.http.metadata.annotation.RequestMapping;
 import tianjian.http.metadata.annotation.ResponseBody;
 import tianjian.http.model.*;
-import tianjian.http.util.UUIDTool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +24,12 @@ public class Oauth2Controller {
 
     @Autowired
     Oauth2ResourceGuard oauth2ResourceGuard;
+
+    @Autowired
+    GuardGenerator guardGenerator;
+
+    @Autowired
+    TokenGenerator tokenGenerator;
 
     private String token = null;
 
@@ -107,7 +113,7 @@ public class Oauth2Controller {
     @ResponseBody
     public Object getResourceID(Model model, String redirect) {
 
-        String guard = UUIDTool.getUUID();
+        String guard = guardGenerator.getGuardString();
 
         Map<String,Object> map = new HashMap<String,Object>();
 
@@ -125,7 +131,7 @@ public class Oauth2Controller {
     @ResponseBody
     public void getResourceToken(String guard) {
 
-        token = UUIDTool.getUUID();
+        token = tokenGenerator.getTokenString();
 
         User user = new User();
 

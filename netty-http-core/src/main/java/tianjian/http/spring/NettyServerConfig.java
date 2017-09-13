@@ -69,5 +69,4 @@ public class NettyServerConfig {
         return freeMarkerEngine;
     }
 
-
 }

@@ -17,6 +17,7 @@
         <module>project-java-log</module>
         <module>technology-prototype</module>
         <module>abstract-article</module>
+        <module>netty-project-test</module>
     </modules>
 
     <dependencies>
@@ -131,11 +132,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.elasticsearch.client/rest -->
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>rest</artifactId>
-            <version>5.4.2</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.elasticsearch.client</groupId>-->
+            <!--<artifactId>rest</artifactId>-->
+            <!--<version>5.5.2</version>-->
+        <!--</dependency>-->
 
 
 
@@ -143,13 +144,13 @@
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>transport</artifactId>
-            <version>5.4.2</version>
+            <version>5.5.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-core -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>6.5.1</version>
+            <version>6.6.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-analyzers-common -->
@@ -163,7 +164,7 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>5.4.2</version>
+            <version>5.5.2</version>
         </dependency>
 
         <dependency>
