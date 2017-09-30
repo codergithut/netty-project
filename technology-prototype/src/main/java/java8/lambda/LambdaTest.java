@@ -1,4 +1,4 @@
-package java8;
+package java8.lambda;
 
 /**
  * @author <a href="mailto:Administrator@gtmap.cn">Administrator</a>

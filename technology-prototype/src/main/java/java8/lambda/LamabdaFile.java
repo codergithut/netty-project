@@ -1,4 +1,4 @@
-package java8;
+package java8.lambda;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
