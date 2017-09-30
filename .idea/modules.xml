@@ -5,11 +5,13 @@
       <module fileurl="file://$PROJECT_DIR$/abstract-article/abstract-article.iml" filepath="$PROJECT_DIR$/abstract-article/abstract-article.iml" />
       <module fileurl="file://$PROJECT_DIR$/netty-common/netty-common.iml" filepath="$PROJECT_DIR$/netty-common/netty-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/netty-project.iml" filepath="$PROJECT_DIR$/netty-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/netty-project-test/netty-project-test.iml" filepath="$PROJECT_DIR$/netty-project-test/netty-project-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/netty-http-core/netty-spring.http-core.iml" filepath="$PROJECT_DIR$/netty-http-core/netty-spring.http-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/netty-websocket-core/netty-websocket-core.iml" filepath="$PROJECT_DIR$/netty-websocket-core/netty-websocket-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/project-java-log/project-java-log.iml" filepath="$PROJECT_DIR$/project-java-log/project-java-log.iml" />
       <module fileurl="file://$PROJECT_DIR$/springboot-security/springboot-security.iml" filepath="$PROJECT_DIR$/springboot-security/springboot-security.iml" />
       <module fileurl="file://$PROJECT_DIR$/technology-prototype/technology-prototype.iml" filepath="$PROJECT_DIR$/technology-prototype/technology-prototype.iml" />
+      <module fileurl="file://$PROJECT_DIR$/window-tool/window-tool.iml" filepath="$PROJECT_DIR$/window-tool/window-tool.iml" />
     </modules>
   </component>
 </project>

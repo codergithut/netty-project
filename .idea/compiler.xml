@@ -8,22 +8,26 @@
         <outputRelativeToContentRoot value="true" />
         <module name="abstract-article" />
         <module name="netty-common" />
+        <module name="netty-project-test" />
         <module name="netty-spring.http-core" />
         <module name="netty-websocket-core" />
         <module name="project-java-log" />
         <module name="springboot-security" />
         <module name="technology-prototype" />
+        <module name="window-tool" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="abstract-article" target="1.5" />
       <module name="netty-common" target="1.8" />
       <module name="netty-project" target="1.5" />
+      <module name="netty-project-test" target="1.5" />
       <module name="netty-spring.http-core" target="1.8" />
       <module name="netty-websocket-core" target="1.5" />
       <module name="project-java-log" target="1.5" />
       <module name="springboot-security" target="1.5" />
-      <module name="technology-prototype" target="1.5" />
+      <module name="technology-prototype" target="1.8" />
+      <module name="window-tool" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,6 +1,7 @@
 package netty.tianjian.common.util.elastic.server;
 
 import netty.tianjian.common.util.elastic.client.ElasticSearchClientManage;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.rest.RestStatus;
@@ -34,6 +35,12 @@ public class ElasticServer {
                 .get();
 
         return response.getResult().getLowercase();
+
+    }
+
+    public static DeleteResponse deleteDataToEs(String index, String type, String id) {
+        DeleteResponse response = client.prepareDelete(index, type, id).get();
+        return response;
 
     }
 

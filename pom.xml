@@ -18,6 +18,7 @@
         <module>technology-prototype</module>
         <module>abstract-article</module>
         <module>netty-project-test</module>
+        <module>window-tool</module>
     </modules>
 
     <dependencies>

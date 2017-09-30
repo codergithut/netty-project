@@ -4,6 +4,8 @@ import java8.lambda.LambadaFunction;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
@@ -96,6 +98,53 @@ public class StreamFilter {
 
         boolean isHealthy = menu.stream().allMatch(d -> d.getCalories() < 1000);
         System.out.println(isHealthy);
+
+        boolean isHealthy1 = menu.stream().noneMatch(d -> d.getCalories() >= 1000);
+
+        System.out.println(isHealthy1);
+
+        menu.stream()
+                .filter(Dish::isVegetarian)
+                .findAny()
+                .ifPresent(d -> System.out.println(d.getName()));
+
+        List<Integer> someNumbers = Arrays.asList(1,2,3,4,5);
+        Optional<Integer> firstSquareDivisibleByThree =
+                someNumbers.stream()
+                .map(x -> x*x)
+                .filter(x -> x%3 == 0)
+                .findFirst();
+        firstSquareDivisibleByThree.ifPresent(System.out::println);
+
+        int total = menu.stream().map(Dish::getCalories).reduce(0, Integer::sum);
+
+        System.out.println(total);
+
+        menu.stream().map(Dish::getCalories).reduce((x, y) -> x < y ? x : y).ifPresent(System.out::println);
+
+        menu.stream().map(Dish::getCalories).reduce((x, y) -> x > y ? x : y).ifPresent(System.out::println);
+
+        Optional<Integer> min = menu.stream().map(Dish::getCalories).reduce(Integer::min);
+
+        Optional<Integer> max = menu.stream().map(Dish::getCalories).reduce(Integer::max);
+
+        min.ifPresent(System.out::println);
+
+        max.ifPresent(System.out::println);
+
+        System.out.println(menu.stream().map(d -> 1).reduce(0, Integer::sum));
+
+        System.out.println(menu.stream().count());
+
+        int colories = menu.stream()
+                .mapToInt(Dish::getCalories)
+                .sum();
+
+        IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+        Stream<Integer> stram = intStream.boxed();
+
+
+
     }
 
 }

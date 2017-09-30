@@ -23,6 +23,8 @@ public class HttpFileUtil {
             file.mkdir();
         }
 
+        System.out.println(content);
+
         FileUtil.saveStringToFile(content, new File(path + "\\" + root + "\\" + name + suffix));
 
     }

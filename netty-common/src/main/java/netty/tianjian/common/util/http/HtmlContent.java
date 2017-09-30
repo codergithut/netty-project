@@ -1,6 +1,5 @@
 package netty.tianjian.common.util.http;
 
-import abstracts.AbstractEntrance;
 import netty.tianjian.common.util.elastic.server.ElasticServer;
 
 import java.io.IOException;
@@ -358,9 +357,6 @@ public class HtmlContent {
             }
             return false;
         }
-
-
-
     }
 
 

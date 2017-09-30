@@ -71,9 +71,7 @@ public class FileUtil {
 
     }
 
-    public static List<File> getFilesByPath(File file, FileFilter fileFilter) {
-
-        List<File> allFile = new ArrayList<File>();
+    public static List<File> getFilesByPath(File file, FileFilter fileFilter, List<File> allFile) {
 
         if(!file.exists()) {
             return null;
@@ -81,23 +79,26 @@ public class FileUtil {
 
         File[] files = file.listFiles();
 
-        for(File fileDetail : files) {
+        if(files != null &&files.length > 0) {
+            for(File fileDetail : files) {
 
-            if(fileDetail.isFile()) {
+                if(fileDetail.isFile()) {
 
-                if(fileFilter != null && !fileFilter.accept(fileDetail)) {
-                    continue;
+                    if(fileFilter != null && !fileFilter.accept(fileDetail)) {
+                        continue;
+                    }
+
+                    System.out.println(fileDetail.getAbsolutePath());
+                    allFile.add(fileDetail);
                 }
 
-                allFile.add(fileDetail);
-            }
+                if(fileDetail.isDirectory()) {
+                    getFilesByPath(fileDetail, fileFilter, allFile);
 
-            if(fileDetail.isDirectory()) {
-
-                getFilesByPath(fileDetail, fileFilter);
-
+                }
             }
         }
+
 
         return allFile;
     }
